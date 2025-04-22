@@ -1,12 +1,26 @@
 import Fastify from 'fastify';
 import axios from 'axios';
 import "dotenv/config";
-import { spawnSync } from "child_process";
 
 const fastify = Fastify({ logger: true });
+
+// Define Artifact class
+class Artifact {
+  constructor(name, version, projectId, type) {
+    this.name = name;
+    this.version = version;
+    this.projectId = projectId;
+    this.type = type;
+  }
+}
+
+fastify.register((instance) => {
+  instance.setQuerystringParser(str => JSON.parse(decodeURIComponent(str)));
+});
 const port = process.env.PORT || 3000;
 
 <code_placeholder>
+
 
 
 fastify.get("/", (request, reply) => {
