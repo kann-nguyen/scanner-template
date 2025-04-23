@@ -45,7 +45,7 @@ fastify.get("/scan", async (request, reply) => {
     return reply.code(400).send({ error: "Missing artifact" });
   }
 
-  const artifact = new Artifact(
+  const artifactScan = new Artifact(
     artifact.name,
     artifact.version,
     artifact.projectId,
@@ -53,7 +53,7 @@ fastify.get("/scan", async (request, reply) => {
   );
   reply.code(200).send({ message: `Scanning artifact ${artifact.name}` });
   try {
-    await processImageScan(artifact);
+    await processImageScan(artifactScan);
   } catch (err) {
     fastify.log.error(err);
   }
