@@ -5,7 +5,6 @@ import { spawn } from "child_process";
 import { randomUUID } from "crypto";
 import { mkdir, readFile, unlink } from "fs/promises";
 
-const fastify = Fastify({ logger: true });
 
 // Define Artifact class
 class Artifact {
@@ -17,8 +16,10 @@ class Artifact {
   }
 }
 
-fastify.register((instance) => {
-  instance.setQuerystringParser(str => JSON.parse(decodeURIComponent(str)));
+// Create Fastify instance with custom query parser
+const fastify = Fastify({
+  logger: true,
+  querystringParser: str => JSON.parse(decodeURIComponent(str))
 });
 const port = process.env.PORT || 3000;
 
