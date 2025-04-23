@@ -17,7 +17,7 @@ fastify.get("/", (request, reply) => {
   return reply.send({ message: "Hello World" });
 });
 
-fastify.get("/image", async (request, reply) => {
+fastify.get("/scan", async (request, reply) => {
   const { name } = request.query;
   if (!name) {
     return reply.code(400).send({ error: "Missing image name" });
