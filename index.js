@@ -21,6 +21,12 @@ const fastify = Fastify({
   logger: true
 });
 const port = process.env.PORT || 3000;
+function replaceUnicodeEscapeSequences(text) {
+  let decodedText = text.replace(/\\u[0-9a-z]{4}/, (match, p1) =>
+    String.fromCharCode(parseInt(p1, 16))
+  );
+  return decodedText;
+}
 // Custom query parser to handle JSON strings
 fastify.addHook('preValidation', async (request, reply) => {
   if (request.query.artifact) {
