@@ -18,11 +18,19 @@ class Artifact {
 
 // Create Fastify instance with custom query parser
 const fastify = Fastify({
-  logger: true,
-  querystringParser: str => JSON.parse(decodeURIComponent(str))
+  logger: true
 });
 const port = process.env.PORT || 3000;
-
+// Custom query parser to handle JSON strings
+fastify.addHook('preValidation', async (request, reply) => {
+  if (request.query.artifact) {
+    try {
+      request.query.artifact = JSON.parse(decodeURIComponent(request.query.artifact));
+    } catch (error) {
+      reply.code(400).send({ error: "Invalid artifact format" });
+    }
+  }
+});
 <code_placeholder>
 
 
@@ -36,6 +44,13 @@ fastify.get("/scan", async (request, reply) => {
   if (!artifact) {
     return reply.code(400).send({ error: "Missing artifact" });
   }
+
+  const artifact = new Artifact(
+    artifact.name,
+    artifact.version,
+    artifact.projectId,
+    artifact.type
+  );
   reply.code(200).send({ message: `Scanning artifact ${artifact.name}` });
   try {
     await processImageScan(artifact);
